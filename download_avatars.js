@@ -18,6 +18,17 @@ function getRepoContributors(repoOwner, repoName, cb) {
         );
         return;
     }
+
+    // check if the owner or repo exists
+
+    // check if the dotenv file exists
+    if (fs.existsSync("./.env")) {
+        console.log("dotenv file exists");
+    } else {
+        console.log("could not find .env file. Program aborted");
+        return;
+    }
+
     var options = {
         url:
             "https://api.github.com/repos/" +
@@ -40,7 +51,7 @@ function getRepoContributors(repoOwner, repoName, cb) {
 }
 
 function downloadImageByURL(url, filePath) {
-    //check if filePath ./avatars exists if it doesnt create the folder
+    // check if filePath ./avatars exists if it doesnt create the folder
     if (fs.existsSync("./avatars")) {
     } else {
         fs.mkdir("./avatars", function(err) {
@@ -62,8 +73,8 @@ getRepoContributors(repoOwner, repoName, function(err, result) {
     console.log("Errors:", err);
     console.log("Result:", result);
     result.forEach(function(element) {
-        console.log(element["login"]);
-        console.log(element["avatar_url"]);
+        // console.log(element["login"]);
+        // console.log(element["avatar_url"]);
         var filePath = "./avatars/" + element["login"] + ".jpg";
         downloadImageByURL(element["avatar_url"], filePath);
     });
