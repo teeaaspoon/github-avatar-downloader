@@ -19,13 +19,17 @@ function getRepoContributors(repoOwner, repoName, cb) {
         return;
     }
 
-    // check if the owner or repo exists
-
     // check if the dotenv file exists
     if (fs.existsSync("./.env")) {
         console.log("dotenv file exists");
     } else {
         console.log("could not find .env file. Program aborted");
+        return;
+    }
+
+    // check if .env is missing information.
+    if (envToken === undefined) {
+        console.log(".env file is missing information: SECRET_KEY missing");
         return;
     }
 
@@ -43,6 +47,15 @@ function getRepoContributors(repoOwner, repoName, cb) {
     };
 
     request(options, function(error, response, body) {
+        // check if the owner or repo exists if doesnt exist statusCode will be 404
+        // check if .envfile contains the correct credentials will statusCode will be 401 if wrong authorization code
+        if (response["statusCode"] != 200) {
+            console.log(
+                "The repo does not exist or you're not authorized. Please enter a valid repoOwner and repoName"
+            );
+            return;
+        }
+
         // parses the json to object
         var object = JSON.parse(body);
         // passes the parameters into callback
@@ -71,7 +84,7 @@ function downloadImageByURL(url, filePath) {
 
 getRepoContributors(repoOwner, repoName, function(err, result) {
     console.log("Errors:", err);
-    console.log("Result:", result);
+    // console.log("Result:", result);
     result.forEach(function(element) {
         // console.log(element["login"]);
         // console.log(element["avatar_url"]);
