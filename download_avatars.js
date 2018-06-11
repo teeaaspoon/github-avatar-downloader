@@ -8,6 +8,13 @@ var repoName = process.argv[3];
 console.log("Welcome to the GitHub Avatar Downloader!");
 
 function getRepoContributors(repoOwner, repoName, cb) {
+    // check if repoOwner and repoName are undefined no request made program terminates
+    if (repoOwner == undefined || repoName == undefined) {
+        console.log(
+            "No repo owner or repo name entered. No request will be made"
+        );
+        return;
+    }
     var options = {
         url:
             "https://api.github.com/repos/" +
