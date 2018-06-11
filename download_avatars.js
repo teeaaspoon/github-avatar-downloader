@@ -40,6 +40,16 @@ function getRepoContributors(repoOwner, repoName, cb) {
 }
 
 function downloadImageByURL(url, filePath) {
+    //check if filePath ./avatars exists if it doesnt create the folder
+    if (fs.existsSync("./avatars")) {
+    } else {
+        fs.mkdir("./avatars", function(err) {
+            if (err) {
+                console.log("failed to create directory", err);
+            }
+        });
+    }
+
     request
         .get(url)
         .on("error", function(err) {
